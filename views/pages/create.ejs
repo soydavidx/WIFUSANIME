@@ -1,0 +1,112 @@
+<%- include('../components/head') %>
+
+  <body>
+    <%- include('../components/nav') %>
+
+      <div class="content">
+        <h2>Genera tu waifu</h2>
+
+        <div class="tag-container"></div>
+
+        <div class="sole-image-grid">
+          <div class="image-item">
+            <div class="loading">Cargando...</div>
+            <img class="waifu-image" alt="Waifu">
+            <div class="options-column">
+              <button class="desc-btn">Descripción</button>
+              <button class="zoom-btn">Maximizar</button>
+            </div>
+            <div class="waifu-info"></div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../components/footer') %>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const imageItem = document.querySelector('.image-item');
+            const loader = imageItem.querySelector('.loading');
+            const img = imageItem.querySelector('.waifu-image');
+            const zoomBtn = imageItem.querySelector('.zoom-btn');
+            const descBtn = imageItem.querySelector('.desc-btn');
+            let currentPopup = null;
+
+            // 初始化标签按钮
+            async function initTags() {
+              const tags = ['waifu', 'neko', 'shinobu', 'megumin', 'awoo',
+                'bully', 'cuddle', 'blush', 'bonk', 'smile',
+                'wave', 'happy', 'dance', 'cringe'];
+              const container = document.querySelector('.tag-container');
+
+              tags.forEach(tag => {
+                const button = document.createElement('button');
+                button.className = 'tag-button';
+                button.textContent = tag;
+                button.onclick = () => loadWaifu(tag);
+                container.appendChild(button);
+              });
+            }
+
+            // 加载图片函数
+            async function loadWaifu(tag) {
+              try {
+                loader.style.display = 'block';
+                img.style.display = 'none';
+
+                const response = await fetch(`https://api.waifu.pics/sfw/${tag}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                if (!data?.url) throw new Error('Invalid image URL');
+
+                img.src = data.url;
+                img.dataset.fullUrl = data.url; // 存储完整URL
+                img.alt = `${tag} image`;
+
+                // 添加元数据
+                img.dataset.originalWidth = '';
+                img.dataset.originalHeight = '';
+
+              } catch (error) {
+                console.error('Error:', error);
+                loader.textContent = 'Error al cargar';
+              } finally {
+                loader.style.display = 'none';
+                img.style.display = 'block';
+              }
+            }
+
+            // 缩放功能
+            zoomBtn.addEventListener('click', () => {
+              if (img.src) window.open(img.dataset.fullUrl, '_blank');
+            });
+
+            // 描述功能
+            descBtn.addEventListener('click', () => {
+              if (currentPopup) currentPopup.remove();
+
+              const dimensionBox = document.createElement('div');
+              dimensionBox.className = 'dimension-popup';
+              dimensionBox.innerHTML = `
+        <p>Dimensiones: ${img.naturalWidth}x${img.naturalHeight}</p>
+        <p>${img.alt || 'Sin descripción'}</p>
+      `;
+
+              document.body.appendChild(dimensionBox);
+              currentPopup = dimensionBox;
+
+              setTimeout(() => {
+                dimensionBox.classList.add('hide');
+                setTimeout(() => dimensionBox.remove(), 500);
+              }, 500);
+            });
+
+            // 初始化
+            initTags();
+            loadWaifu('waifu');
+          });
+        </script>
+  </body>
+
+  </html>

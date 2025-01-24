@@ -1,0 +1,134 @@
+<%- include('../components/head') %>
+
+  <body>
+    <%- include('../components/nav') %>
+
+      <div class="content">
+        <div class="header-container">
+          <h2>Welcome to WifusAnime</h2>
+          
+        </div>
+        <div class="recommendation-header">
+          <h3>Recomendaciones del Día</h3>
+        </div>
+
+        <div class="image-grid">
+          <div class="image-item" data-id="1">
+            <div class="loading">Cargando...</div>
+            <img class="waifu-image" alt="Waifu 1">
+            <div class="options-column">
+              <button class="desc-btn">Descripción</button>
+              <button class="zoom-btn">Maximizar</button>
+            </div>
+            <div class="waifu-info"></div>
+          </div>
+
+          <div class="image-item" data-id="1">
+            <div class="loading">Cargando...</div>
+            <img class="waifu-image" alt="Waifu 1">
+            <div class="options-column">
+              <button class="desc-btn">Descripción</button>
+              <button class="zoom-btn">Maximizar</button>
+            </div>
+            <div class="waifu-info"></div>
+          </div>
+
+          <div class="image-item" data-id="1">
+            <div class="loading">Cargando...</div>
+            <img class="waifu-image" alt="Waifu 1">
+            <div class="options-column">
+              <button class="desc-btn">Descripción</button>
+              <button class="zoom-btn">Maximizar</button>
+            </div>
+            <div class="waifu-info"></div>
+          </div>
+
+          <div class="image-item" data-id="1">
+            <div class="loading">Cargando...</div>
+            <img class="waifu-image" alt="Waifu 1">
+            <div class="options-column">
+              <button class="desc-btn">Descripción</button>
+              <button class="zoom-btn">Maximizar</button>
+            </div>
+            <div class="waifu-info"></div>
+          </div>
+        </div>
+        <%- include('../components/footer') %>
+  </body>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+  const imageItems = document.querySelectorAll('.image-item');
+
+  await Promise.all(Array.from(imageItems).map(async (item) => {
+    try {
+      const response = await fetch('/create/generate');
+      const data = await response.json();
+      
+      if (!data.image) throw new Error('Imagen no válida');
+      
+      const img = item.querySelector('.waifu-image');
+      const loading = item.querySelector('.loading');
+      const descBtn = item.querySelector('.desc-btn');
+      const zoomBtn = item.querySelector('.zoom-btn');
+      let currentPopup = null;
+
+      // 图片加载处理
+      img.onload = () => {
+        img.dataset.originalWidth = img.naturalWidth;
+        img.dataset.originalHeight = img.naturalHeight;
+        loading.style.display = 'none'; // 隐藏加载提示
+      };
+
+      img.src = data.image;
+
+      // 描述按钮功能
+      descBtn.addEventListener('click', () => {
+          // 关闭现有弹出层
+          if (currentPopup) {
+            currentPopup.remove();
+          }
+  
+          // 创建新弹出层
+          const dimensionInfo = `Dimensiones originales: ${img.dataset.originalWidth || '?'}x${img.dataset.originalHeight || '?'}`;
+          
+          const dimensionBox = document.createElement('div');
+          dimensionBox.className = 'dimension-popup';
+          dimensionBox.innerHTML = `
+            <p>${dimensionInfo}</p>
+            <p>${data.description || 'Sin descripción'}</p>
+          `;
+  
+          document.body.appendChild(dimensionBox);
+          currentPopup = dimensionBox;
+  
+          // 2秒后开始淡出
+          setTimeout(() => {
+            dimensionBox.classList.add('hide');
+            
+            // 1秒后移除元素
+            setTimeout(() => {
+              dimensionBox.remove();
+              currentPopup = null;
+            }, 500);
+          }, 500);
+        });
+
+      // 最大化按钮功能
+      zoomBtn.addEventListener('click', () => {
+        item.querySelector('.zoom-btn').addEventListener('click', () => {
+          window.open(data.image, '_blank');
+        });
+      });
+
+    } catch (error) {
+      console.error('Error:', error);
+      item.innerHTML = `<p class="error">Error al cargar</p>`;
+    }
+  }));
+});
+
+
+  </script>
+
+  </html>

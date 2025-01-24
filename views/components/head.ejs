@@ -1,0 +1,330 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIFUU | <%= title %>
+  </title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
+
+    body {
+      max-width: 1200px;
+      margin: 40px auto;
+      /* 增加外边距 */
+      padding: 40px;
+      /* 增加内边距 */
+      font-family: 'Noto Serif', serif;
+      background-color: #f8f9fa;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      /* 添加阴影增强层次感 */
+      border-radius: 10px;
+    }
+
+    .content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .recommendation-header {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .recommendation-header h3 {
+      display: inline-block;
+      padding: 0 20px;
+      background: #f8f9fa;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    p,
+    h1,
+    h2,
+    h3,
+    a,
+    ul {
+      margin: 0;
+      padding: 0;
+      text-decoration: none;
+      color: #222;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      /* Separa el logo-container y el ul */
+      align-items: center;
+      margin-bottom: 60px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      text-transform: uppercase;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      /* Espacio entre los logos y el título */
+    }
+
+    .left-logo,
+    .right-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .site-title {
+      flex-grow: 1;
+      /* Permite que el título ocupe el espacio restante */
+      text-align: center;
+    }
+
+    .logo {
+      width: 100px;
+      height: auto;
+    }
+
+    nav h1 {
+      font-size: 3em;
+      margin: 0;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      /* Espacio entre los elementos de la lista */
+    }
+
+    nav li {
+      list-style-type: none;
+    }
+
+    nav p,
+    nav a {
+      color: #777;
+      font-weight: 300;
+    }
+
+    footer {
+      color: #777;
+      text-align: center;
+      margin: 80px auto 20px;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      font-size: 2.2em;
+    }
+
+    h3 {
+      text-transform: capitalize;
+      margin-bottom: 8px;
+    }
+
+    .content {
+      margin-left: 20px;
+    }
+
+    .waifu-link {
+      color: blue;
+      /* Color azul */
+      text-decoration: underline;
+      /* Subrayado */
+    }
+
+    .waifu-link-container {
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    .waifu-link:hover {
+      color: darkblue;
+      text-decoration: none;
+    }
+
+    .waifu-link {
+      color: blue;
+      text-decoration: underline;
+    }
+
+    .waifu-link:hover {
+      color: darkblue;
+      text-decoration: none;
+    }
+
+    .sole-image-grid {
+      width: 50%;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .image-item {
+      position: relative;
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-item img {
+      max-width: 60%;
+      height: auto;
+      padding: 10px;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .options-column {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .options-column button {
+      margin: 0;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .options-column button:hover {
+      background: pink;
+      color: #4A235A	;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .waifu-image {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      /* 保持比例完整显示 */
+      transition: transform 0.3s ease;
+    }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.2em;
+      color: #666;
+      transition: opacity 0.3s ease;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .image-item {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .waifu-info {
+      position: absolute;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 10px;
+      width: 100%;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .image-item:hover .waifu-info {
+      transform: translateY(0);
+    }
+
+    .dimension-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      min-width: 300px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      opacity: 1;
+      transition: all 1s ease;
+    }
+
+    .dimension-popup.hide {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    .dimension-popup p {
+      margin: 10px 0;
+      font-size: 1.1em;
+    }
+
+    .dimension-popup p:first-child {
+      color: #00ff9d;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .tag-button {
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      border: 2px solid var(--primary);
+      border-radius: 0.5rem;
+      background: white;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 悬停动效增强 */
+    .tag-button:hover {
+      background: #2B6CB0;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
